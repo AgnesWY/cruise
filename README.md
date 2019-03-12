@@ -1,2 +1,2 @@
 # cruise
-one practice
+one server management software interface
