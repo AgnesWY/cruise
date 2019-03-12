@@ -2,7 +2,15 @@
   <header>
     <div class="header-wrap">
       <img src="@/assets/img/logo.svg" class="logo">
-      <div class="right">账户</div>
+      <el-dropdown>
+        <span class="el-dropdown-link">
+          用户头像<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item><i class="icon-id-card"></i>Profile</el-dropdown-item>
+          <el-dropdown-item><i class="icon-sign-in"></i>Sign Out</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>   
     
   </header>

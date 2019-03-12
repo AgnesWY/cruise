@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="fonts.css">
+	<style type="text/css">
+		.view-card{
+			position: relative;
+			background: #FF9A2A;
+			width: 260px;
+			height: 150px;
+			color: white;
+		}
+		.mid{
+			width: 140px;
+			
+			margin: 0 auto;
+		}
+		.icon{
+			text-align: center;
+			font-size: 144px;
+			opacity: 0.2;
+
+		}
+		.left{
+			    position: absolute;
+			    left: 15px;
+			    top: 10px;
+			    font-size: 18px;
+			    font-weight: bold;
+		}
+		.right{
+			position: absolute;
+		    right: 15px;
+		    bottom: 15px;
+		    font-size: 48px;
+		}
+		.info-card{
+			background: #fff;
+			width: 260px;
+			height: 150px;
+			color: #000;
+			display: grid;
+			grid-template-columns:1fr 1fr 1fr ;
+		    grid-template-rows: 1fr 1fr;
+		    grid-template-areas: 
+			    "line-one line-one line-one"
+			    "line-two  line-two line-two";
+		}
+		.line-one{
+			grid-area: line-one;
+		}
+		.line-two{
+			grid-area: line-two;
+		}
+	</style>
+</head>
+<body>
+ <div class="view-card">
+	 <div class="left">Building</div>
+	 <div class="mid"><i class="icon-cog icon"></i></div>
+	 <div class="right">3</div>
+ </div>
+
+ <div class="info-card">
+	 <div class="line-one">1</div>
+	 <div class="line-one">2</div>
+	 <div class="line-one">3</div>
+	 <div class="line-two">4</div>
+	 <div class="line-two">5</div>
+	 <div class="line-two">6</div>
+ </div>
+	
+</body>
+</html>
