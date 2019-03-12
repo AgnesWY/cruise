@@ -5,6 +5,20 @@
       <sidebar></sidebar>
       <router-view/>
     </div>
+
+    <el-row>
+      <el-col :md="6" :lg="4">
+        <div class="sidebar">
+          <sidebar></sidebar>
+        </div>
+      </el-col>
+      <el-col :md="18" :lg="20">
+        <div class="content">
+          <router-view/>
+        </div>
+      </el-col>
+    </el-row>
+
     <my-footer></my-footer>
   </div>
 </template>
@@ -33,7 +47,7 @@
 
 }
 .container{
-  display: grid;
   max-width: 1200px;
+
 }
 </style>

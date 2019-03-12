@@ -1,7 +1,10 @@
 <template>
   <header>
-    sdd
-  
+    <div class="header-wrap">
+      <img src="@/assets/img/logo.svg" class="logo">
+      <div class="right">账户</div>
+    </div>   
+    
   </header>
 </template>
 <script>
@@ -11,15 +14,13 @@ export default {
 </script>
 <style lang="less" scoped>
 header {
+  width: 100%;
+  height: 80px;
   background: #fff;
-  line-height: 40px;
+  box-shadow: 0px 5px 2px #ccc;
   .logo {
-    float: right;
-    padding-right: 8px;
-    img {
-      vertical-align: middle;
-      height: 25px;
-    }
+    width: 120px;
+    height:40px;
   }
   .el-dropdown-link {
     cursor: pointer;
@@ -34,13 +35,6 @@ header {
         color: #475669;
         text-decoration: none;
       }
-    }
-  }
-  .dl-approval {
-    margin-right: 40px;
-    .el-badge__content {
-      position: absolute;
-      top: 2em;
     }
   }
 }
