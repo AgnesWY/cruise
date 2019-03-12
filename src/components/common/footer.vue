@@ -2,7 +2,7 @@
   <div>
     <footer>
       <p class="com-infor-num">
-       隔壁仓库科技成都有限公司 All Rights Reserved©2016 蜀ICP备16012778号-1 
+       ©Copyright 2017 ThoughtWorks
       </p>
     </footer>
   </div>
@@ -10,11 +10,11 @@
 
 <script>
   export default {
-    name: 'dl-footer'
+    name: 'my-footer'
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   footer {
     background: #fff;
     padding: 15px 0 15px 0;
@@ -22,13 +22,6 @@
       font-size: 12px;
       color: #444;
       text-align: center;
-      a {
-        color: #444;
-        text-decoration: none;
-        &:hover {
-          text-decoration: underline;
-        }
-      }
     }
   }
 </style>
