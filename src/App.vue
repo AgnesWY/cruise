@@ -27,6 +27,36 @@
       myHeader,
       myFooter,
       sidebar
+    },
+    methods:{
+      orderPicStatus(){
+        var that = this;
+        // this.$http.post('/dladmin/ordercomment/evaluateOrderCommentPicStatus.html',reqData, {emulateJSON:true}).then( ({data,ok,statusText}) => {
+        //     if(ok){
+        //       if(data.data)
+        //       {
+        //         that.searchList(1);
+
+        //       }
+        //      that.$message.success(data.msg);
+
+        //     }else { 
+        //        that.$message.error('系统错误，请稍后再试');
+        //     }
+        // })
+         this.$http.get('http://localhost:3001/agents').then(({data,ok,statusText}) => {
+            if(data.status || !data.data) {
+              console.log(data)
+            }else {
+              
+            }
+          });
+
+
+      }
+    },
+    created:function(){
+      this.orderPicStatus()
     }
   }
 </script>
