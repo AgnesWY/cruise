@@ -1,6 +1,7 @@
 # my-cruise
 
 > one server management software's interface
+before running this program, please make sure your node version is over 6.0.0 and npm is over 3.0.0
 
 ## Build Setup
 
@@ -11,11 +12,6 @@ npm install
 # serve with hot reload at localhost:9500
 npm run dev
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 
 # run unit tests
 npm run unit

@@ -48,7 +48,7 @@
             if(data.status || !data.data) {
               console.log(data)
             }else {
-              
+              that.$message.error('请求失败，请稍后再试');
             }
           });
 

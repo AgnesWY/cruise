@@ -3,7 +3,7 @@
 		<!-- 图片部分 -->
 		<el-col :span="3" >
 			<div class="img-part">
-				<img src="@/assets/img/os_icons/windows.png" class="os-img" />
+				<img :src="imgSource" class="os-img" />
 			</div>
 
 		</el-col>
@@ -12,17 +12,35 @@
 			<!-- 信息展示 -->
 			<el-row class="info-shows">
 				<el-col :span="9">
-					
+					<i class="icon-desktop"></i>
+					<span>{{agentsItem.name}}</span>
 				</el-col>
-				<el-col :span="2"></el-col>
-				<el-col :span="6"></el-col>
-				<el-col :span="7"></el-col>
+				<el-col :span="2">
+					<div>{{agentsItem.status}}</div>
+				</el-col>
+				<el-col :span="6">
+					<i class="icon-info"></i>
+					<span>{{agentsItem.ip}}</span>
+				</el-col>
+				<el-col :span="7">
+					<i class="icon-folder"></i>
+					<span>{{agentsItem.location}}</span>
+				</el-col>
 			</el-row>
 			<!-- 操作 -->
 			<el-row class="info-operate">
+				<el-col :span="22">
+					<i class="icon-plus"></i>
+					<i class="icon-trash"></i>
+				</el-col>
+				<el-col :span="2">
+					<i class="icon-deny"></i>
+				</el-col>
 				
 			</el-row>
 		</el-col>
+
+		<!-- 模态框 -->
 
 	
 	</el-row>
@@ -32,8 +50,32 @@
 export default {
 	name: 'db-info',
 	props:{
-       
-    }
+        agentsItem:{
+			type: Object,
+	        default: function(){
+	          return {
+	          	"name": "bjstdmngbdr01.thoughtworks.com",
+				"os": "windows",
+				"status": "idle",
+				"type": "physical",
+				"ip": "192.168.1.102",
+				"location": "/var/lib/cruise-agent",
+				"resources": [
+				"Firefox",
+				"Safari",
+				"Ubuntu",
+				"Chrome"
+				],
+				"id": 1
+	          }
+	        }
+		}
+	},
+	data: function() {
+      return {
+        imgSource:"@/assets/img/os_icons/"+this.agentsItem.os+".png"
+      }
+    },
 }
 </script>
 

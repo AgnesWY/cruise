@@ -56,7 +56,10 @@
       </el-col>
     </el-row>
     <!-- 循环的主体对象  db-info -->
-    <db-info></db-info>
+    <div v-for="item in agentsList">
+      <db-info :agents-item="item"></db-info>
+    </div>
+    
    
 
   </div>
@@ -83,12 +86,49 @@ export default {
         "right":"5",
         "className":"icon-coffee"
       }],
-      searchKey:""
+      searchKey:"",
+      // 列表数据
+      agentsList:[]
 
       
     }
   },
   methods: {
+    // 查询所有列表数据
+    searchAllList(){
+      var that = this;
+      this.$http.get('http://localhost:3001/agents').then(({data,ok,statusText}) => {
+        if(data || ok) {
+          that.agentsList = data;
+        }else {
+          that.$message.error('请求失败，请稍后再试');
+        }
+      });
+
+    },
+    // 添加一个resource
+    addOneResource(agentInfo,addResource){
+      var theId = agentInfo.id;
+      var that = this;
+      // 将addResource的值添加到 agentInfo的 resources里
+      // 转化到req
+      var reqData = JSON.parse(agentInfo)
+
+      this.$http.put('http://localhost:3001/agents'+theId,reqData, {emulateJSON:true}).then( ({data,ok,statusText}) => {
+            if(ok){
+              if(data)
+              {
+                that.$message.success("ok ");
+              }
+            }else { 
+               that.$message.error('fail');
+            }
+        })
+
+    }
+    
+  },
+  created:function(){
     
   }
 }
