@@ -1,9 +1,12 @@
 <template>
   <div>
     <footer>
-      <p class="com-infor-num">
+      <el-row>
+        <p class="com-infor-num">
        ©Copyright 2017 ThoughtWorks
       </p>
+      </el-row>
+      
     </footer>
   </div>
 </template>
@@ -17,7 +20,6 @@
 <style lang="less" scoped>
   footer {
     background: #fff;
-    padding: 15px 0 15px 0;
     .com-infor-num {
       font-size: 12px;
       color: #444;
