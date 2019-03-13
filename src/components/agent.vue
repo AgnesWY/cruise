@@ -55,8 +55,8 @@
         </div>
       </el-col>
     </el-row>
-    <!-- 循环的主体对象 -->
-    <el-row></el-row>
+    <!-- 循环的主体对象  db-info -->
+    <db-info></db-info>
    
 
   </div>
@@ -64,10 +64,12 @@
 
 <script>
 import viewCard from '@/components/common/viewCard.vue';
+import dbInfo from '@/components/common/dbInfo.vue';
 export default {
   name: 'agent',
   components: {
-      viewCard
+      viewCard,
+      dbInfo
   },
   data () {
     return {
