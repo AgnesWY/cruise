@@ -6,7 +6,7 @@ there are some modules in my project you can uncompress them before you start to
 
 ## Build Setup
 
-``` bash server
+``` bash server ,please make sure the server is running before running this project
 # install dependencies
 npm install
 
