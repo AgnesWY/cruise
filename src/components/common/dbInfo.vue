@@ -54,14 +54,6 @@
 			</el-row>
 		</el-col>
 
-		<!-- 模态框 -->
-		<el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-		      <el-input v-model="addSources" autocomplete="off"></el-input>
-		  <div slot="footer" class="dialog-footer">
-		    <el-button @click="dialogFormVisible = false">取 消</el-button>
-		    <el-button type="primary" @click="addInter(agentsItem)">确 定</el-button>
-		  </div>
-		</el-dialog>
 		
 
 	
@@ -103,7 +95,7 @@ export default {
         buildingColor:"building-back-color",
         // 添加的
         addSources:"",
-        dialogFormVisible:false
+        activeNames: ['1']
 
 
       }
@@ -133,42 +125,6 @@ export default {
 
 	    },
 
-    	// 添加多个resource
-	  //   addResources(agentInfo,addResourceStr){
-
-			// var agentId = agentInfo.id;
-			// var reqData = JSON.parse(JSON.stringify(agentInfo));
-			// var mySet = new Set(agentInfo.resources);
-			// // 添加新增元素
-			// var addArr= addResourceStr.split(",");
-	  //   	for(var i=0; i<addArr.length; i++){
-	  //   		if(addArr[i]){
-	  //   			mySet.add(addArr[i]);
-	  //   		}
-
-	  //   	}
-			// reqData.resources = Array.from(mySet)
-			// var that = this;
-		 //    this.$http.put('http://localhost:3001/agents/'+agentId,reqData).then( ({data,ok,statusText}) => {
-	  //           if(ok){
-	  //             if(data)
-	  //             {
-	  //               this.$message({
-			//             type: 'success',
-			//             message: '添加成功!',
-			//             duration:1000
-		 //            });
-	  //             }
-	  //           }else { 
-	  //              this.$message({
-			//             type: 'fail',
-			//             message: '添加失败!',
-			//             duration:1000
-		 //            });
-	  //           }
-	  //       })
-
-	  //   },
 	    // 通知父组件更新数据
 	    emitUpdateData(){
 	    	this.$emit('updateData')
@@ -196,12 +152,7 @@ export default {
 	        }).catch(() => {
 	                  
 	        });
-	    },
-	  //   // 添加
-	  //   addInter(agentInfo){
-	  //   	this.addResources(agentInfo,this.addSources);
-			// this.dialogFormVisible = false
-	  //   }
+	    }
 
     }
 }
@@ -268,7 +219,7 @@ export default {
 		}
 		.info-operate{
 			height:50%;
-		    line-height: 75px;
+		    line-height: 30px;
 		    .plus-wrap{
 		    	height: 50px;
 		    	padding:5px;

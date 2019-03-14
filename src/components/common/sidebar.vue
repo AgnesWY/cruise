@@ -114,6 +114,10 @@
 				a{
 					color:#999;
 					text-decoration:none;
+					
+				}
+				a:hover{
+					color:#00B4CF;
 				}
 			}
 		}
