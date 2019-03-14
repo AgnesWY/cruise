@@ -31,7 +31,7 @@ header {
   width: 100%;
   height: 60px;
   background: #fff;
-  box-shadow: 0px 5px 2px #ccc;
+  box-shadow: 0px 2px 2px #ccc;
   .logo {
     width: 120px;
     height: 40px;

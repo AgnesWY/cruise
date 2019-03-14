@@ -45,6 +45,7 @@ export default {
 			text-align: center;
 			font-size: 144px;
 			opacity: 0.2;
+			cursor:pointer;
 
 		}
 	}

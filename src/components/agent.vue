@@ -4,10 +4,21 @@
     <!-- 卡片信息栏 -->
     <el-row class="cards-wrap">
       <el-col :span="8">
-        <view-card :left-words="cardInfo[0].left" :right-wrods="cardInfo[0].right" :icon-name="cardInfo[0].className" :backColor="'background:#FF9A2A'"></view-card>
+        <view-card 
+        :left-words="cardInfo[0].left" 
+        :right-wrods="cardInfo[0].right" 
+        :icon-name="cardInfo[0].className" 
+        :backColor="'background:#FF9A2A'">
+          
+        </view-card>
       </el-col>
       <el-col :span="8">
-         <view-card :left-words="cardInfo[1].left" :right-wrods="cardInfo[1].right" :icon-name="cardInfo[1].className" :backColor="'background:#7FBC39'"></view-card>
+         <view-card 
+         :left-words="cardInfo[1].left" 
+         :right-wrods="cardInfo[1].right" 
+         :icon-name="cardInfo[1].className" 
+         :backColor="'background:#7FBC39'">
+         </view-card>
       </el-col>
       <el-col :span="8">
         <div class="info-card">
@@ -55,14 +66,40 @@
         </div>
       </el-col>
     </el-row>
+
+
     <!-- 循环的主体对象  db-info -->
-    <div v-for="item in agentsList">
-      <db-info :agents-item="item"></db-info>
-    </div>
-    
-   
+    <db-info 
+      v-for="(item,index) in agentsList" :key="index" 
+      :agents-item="item" 
+      @updateData ="searchAllList()" 
+      @addResources= "addResourcesInter(item,arguments)">
+    </db-info>
+
+    <!-- add dialog -->
+    <div class="add-dialog" id="details" v-show="isShowDialog" :style="{ top: addTop+ 'px', left: addLeft + 'px' }">
+      <div class="nav nav-border"></div>
+      <div class="nav nav-background"></div>
+      <el-row>
+        <el-col :span="2" :offset="22">
+          <i class="icon-close" @click="closeDialog()"></i>
+        </el-col>
+      </el-row>
+      <el-row>Separate multiple resource name with commas</el-row>
+      <el-row>
+        <input type="text " v-model="addSources" placeholder="e.g.Chrome,Firefox" class="add-input">
+      </el-row>
+      
+      <el-row>
+        <span @click="clickAddBtn()" class="my-btn blue-btn">Add resource</span>
+        <span @click="closeDialog()" class="my-btn dark-btn">cancel</span>
+      </el-row>
+    </div> 
+    <div class="dailyMasklayer " @click="closeDialog" v-show="isShowDialog"></div>
 
   </div>
+
+
 </template>
 
 <script>
@@ -88,12 +125,21 @@ export default {
       }],
       searchKey:"",
       // 列表数据
-      agentsList:[]
+      agentsList:[],
+      // 要添加的数据
+      addSources:"",
+      isShowDialog:false,
+      addTop:"",
+      addLeft:"",
+      // 此时点击的item
+      addNowItem:""
+       
 
       
     }
   },
   methods: {
+    /*******https******/
     // 查询所有列表数据
     searchAllList(){
       var that = this;
@@ -106,29 +152,68 @@ export default {
       });
 
     },
-    // 添加一个resource
-    addOneResource(agentInfo,addResource){
-      var theId = agentInfo.id;
+    // 添加多个resource
+    addResources(agentInfo,addResourceStr){
+      var agentId = agentInfo.id;
+      var reqData = JSON.parse(JSON.stringify(agentInfo));
+      var mySet = new Set(agentInfo.resources);
+      // 添加新增元素
+      var addArr= addResourceStr.split(",");
+        for(var i=0; i<addArr.length; i++){
+          if(addArr[i]){
+            mySet.add(addArr[i]);
+          }
+
+        }
+      reqData.resources = Array.from(mySet)
       var that = this;
-      // 将addResource的值添加到 agentInfo的 resources里
-      // 转化到req
-      var reqData = JSON.parse(agentInfo)
+      this.$http.put('http://localhost:3001/agents/'+agentId,reqData).then( ({data,ok,statusText}) => {
+        if(ok){
+          if(data)
+          {
+            this.$message({
+            type: 'success',
+            message: '添加成功!',
+            duration:1000
+          });
+            this.closeDialog()
+            this.searchAllList()
+          }
+        }else { 
+           this.$message({
+            type: 'fail',
+            message: '添加失败!',
+            duration:1000
+          });
+        }
+      })
 
-      this.$http.put('http://localhost:3001/agents'+theId,reqData, {emulateJSON:true}).then( ({data,ok,statusText}) => {
-            if(ok){
-              if(data)
-              {
-                that.$message.success("ok ");
-              }
-            }else { 
-               that.$message.error('fail');
-            }
-        })
+    },
+    /*******交互******/
+    //添加资源
+    addResourcesInter(agentInfo,arg){
+      this.addTop = arg[0].pageY-40; // 弹出框的上边位置   
+      this.addLeft = arg[0].pageX-386;  // 弹出框的左边位置   
+      // 显示弹框
+      this.isShowDialog = true;
+      this.addNowItem = agentInfo;
 
+
+    },
+    // 点击添加
+    clickAddBtn(){
+      this.addResources(this.addNowItem,this.addSources);
+
+    },
+    // 关闭弹窗
+    closeDialog(){
+      this.isShowDialog = false;
+      this.addSources =""
     }
     
   },
   created:function(){
+    this.searchAllList();
     
   }
 }
@@ -172,7 +257,7 @@ export default {
         line-height:50px;
         text-align:center;
         display:inline-block;
-        border-right:solid #ececec 1px;
+        border-right:solid #F3F3F3 1px;
       }
       .tab-active{
         color:#00B4CF;
@@ -194,7 +279,7 @@ export default {
       input{
         height: 25px;
         line-height: 25px;
-        background-color: #ececec;
+        background-color: #F3F3F3;
         padding-left: 30px;
       }
       .active{
@@ -203,7 +288,85 @@ export default {
 
     }
   }
+
+
+  .add-dialog {
+    position: absolute;
+    width: 570px;
+    height: 150px;
+    padding: 5px;
+    background: #fff;
+    line-height:20px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+    border: 1px solid #00b4cf;
+    z-index:400;
+      i{
+        font-size: 20px;
+        color: #00b4cf;
+        cursor:pointer;
+
+      }
+      .el-row{
+        margin-bottom: 10px;
+      }
+      .add-input{
+        box-sizing: border-box;
+        color: #606266;
+        display: inline-block;
+        font-size: inherit;
+        width:100%;
+        height: 40px;
+        line-height: 40px;
+        outline: 0;
+        padding: 0 15px;
+        border: solid #ccc 2px;
+        border-color: #ccc #ccc transparent #ccc;
+      }
+      .nav {
+        position:absolute;
+        left:30px;
+        width:0;
+        height:0;
+        overflow:hidden;
+
+        border-width:10px;
+        border-style:solid dashed dashed dashed;
+       }
+      .nav-border {
+        top:-20px;
+        border-color:transparent transparent #00b4cf transparent;
+        }
+      .nav-background {
+        top:-19px;
+        border-color:transparent transparent #fff transparent;
+      } 
+      .my-btn{
+        height: 50px;
+        padding: 5px 10px;
+        color: #fff;
+        margin-right:10px;
+        cursor:pointer;
+
+      }
+      .blue-btn{
+        background-color: #00B4Cf;
+      }
+      .dark-btn{
+        background-color: #2D4054;
+      }
+  }
  
 
+}
+.dailyMasklayer {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background: #000000;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  z-index:200;
 }
 </style>

@@ -1,24 +1,32 @@
 <template>
 	<el-row class="db-info">
 		<!-- 图片部分 -->
-		<el-col :span="3" >
-			<div class="img-part">
-				<img :src="imgSource" class="os-img" />
+		<el-col :span="4" class="img-part">
+			<div class="img-wrap">
+				<img v-if="agentsItem.os == 'windows'" src="@/assets/img/os_icons/windows.png" class="os-img" />
+				<img v-if="agentsItem.os == 'ubuntu'" src="@/assets/img/os_icons/ubuntu.png" class="os-img" />
+				<img v-if="agentsItem.os == 'debian'" src="@/assets/img/os_icons/debin.png" class="os-img" />
+				<img v-if="agentsItem.os == 'suse'" src="@/assets/img/os_icons/suse.png" class="os-img" />
+				<img v-if="agentsItem.os == 'centos'" src="@/assets/img/os_icons/cent_os.png" class="os-img" />
 			</div>
 
 		</el-col>
 		<!-- 信息部分 -->
-		<el-col :span="21" class="info-part">
+		<el-col :span="20" class="info-part">
 			<!-- 信息展示 -->
 			<el-row class="info-shows">
-				<el-col :span="9">
+				<el-col :span="1">
 					<i class="icon-desktop"></i>
+				</el-col>
+				<el-col :span="8" class="name-style">
 					<span>{{agentsItem.name}}</span>
 				</el-col>
-				<el-col :span="2">
-					<div>{{agentsItem.status}}</div>
+				<el-col :span="4">
+					<!-- <span class="status-tab">{{agentsItem.status}}</span> -->
+					<span v-bind:class="[agentsItem.status=='idle'? idleColor : buildingColor, statusTab]">{{agentsItem.status}}</span>
+					 
 				</el-col>
-				<el-col :span="6">
+				<el-col :span="4">
 					<i class="icon-info"></i>
 					<span>{{agentsItem.ip}}</span>
 				</el-col>
@@ -29,21 +37,37 @@
 			</el-row>
 			<!-- 操作 -->
 			<el-row class="info-operate">
-				<el-col :span="22">
-					<i class="icon-plus"></i>
-					<i class="icon-trash"></i>
+				<el-col :span="20">
+					<span class="plus-wrap"><i class="icon-plus" @click="emitAddBtn($event)"></i></span>
+					<span class="resource-wrap" v-for="(item,index) in agentsItem.resources" :key="index" >
+						<span>{{item}}</span>
+						<i class="icon-trash mgl-4" @click="sureToDelete(agentsItem,item)"></i>
+					</span>
 				</el-col>
-				<el-col :span="2">
-					<i class="icon-deny"></i>
+				<el-col :span="4" v-if="agentsItem.status=='building'">
+					<span class="deny-wrap">
+						<i class="icon-deny"></i>
+						<span>Deny</span>
+					</span>
 				</el-col>
 				
 			</el-row>
 		</el-col>
 
 		<!-- 模态框 -->
+		<el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+		      <el-input v-model="addSources" autocomplete="off"></el-input>
+		  <div slot="footer" class="dialog-footer">
+		    <el-button @click="dialogFormVisible = false">取 消</el-button>
+		    <el-button type="primary" @click="addInter(agentsItem)">确 定</el-button>
+		  </div>
+		</el-dialog>
+		
 
 	
 	</el-row>
+
+
 </template>
 
 <script>
@@ -73,9 +97,113 @@ export default {
 	},
 	data: function() {
       return {
-        imgSource:"@/assets/img/os_icons/"+this.agentsItem.os+".png"
+      	// class 的值
+        statusTab:"status-tab",
+        idleColor:"idle-back-color",
+        buildingColor:"building-back-color",
+        // 添加的
+        addSources:"",
+        dialogFormVisible:false
+
+
       }
     },
+    methods:{
+    	/*******https******/
+		// 删除一个resource
+		deleteOneResource(agentInfo,resource){
+			var agentId = agentInfo.id;
+			var reqData = JSON.parse(JSON.stringify(agentInfo));
+			var mySet = new Set(agentInfo.resources);
+			mySet.delete(resource);
+			reqData.resources = Array.from(mySet)
+			var that = this;
+	        this.$http.put('http://localhost:3001/agents/'+agentId,reqData).then( ({data,ok,statusText}) => {
+	            if(ok){
+	              if(data)
+	              {
+	                that.emitUpdateData()
+
+
+	              }
+	            }else { 
+	               that.$message.error('fail');
+	            }
+	        })
+
+	    },
+
+    	// 添加多个resource
+	  //   addResources(agentInfo,addResourceStr){
+
+			// var agentId = agentInfo.id;
+			// var reqData = JSON.parse(JSON.stringify(agentInfo));
+			// var mySet = new Set(agentInfo.resources);
+			// // 添加新增元素
+			// var addArr= addResourceStr.split(",");
+	  //   	for(var i=0; i<addArr.length; i++){
+	  //   		if(addArr[i]){
+	  //   			mySet.add(addArr[i]);
+	  //   		}
+
+	  //   	}
+			// reqData.resources = Array.from(mySet)
+			// var that = this;
+		 //    this.$http.put('http://localhost:3001/agents/'+agentId,reqData).then( ({data,ok,statusText}) => {
+	  //           if(ok){
+	  //             if(data)
+	  //             {
+	  //               this.$message({
+			//             type: 'success',
+			//             message: '添加成功!',
+			//             duration:1000
+		 //            });
+	  //             }
+	  //           }else { 
+	  //              this.$message({
+			//             type: 'fail',
+			//             message: '添加失败!',
+			//             duration:1000
+		 //            });
+	  //           }
+	  //       })
+
+	  //   },
+	    // 通知父组件更新数据
+	    emitUpdateData(){
+	    	this.$emit('updateData')
+	    },
+	    // 通知父组件点击了添加按钮
+	    emitAddBtn(event){
+	    	this.$emit('addResources',event)
+
+	    },
+
+	    /*******interactive******/ 
+	    // 删除resource的交互提示
+	    sureToDelete(agentInfo,resource) {
+	        this.$confirm('确认删除这个资源吗?', '提示', {
+	          confirmButtonText: '确定',
+	          cancelButtonText: '取消',
+	          type: 'warning'
+	        }).then(() => {
+	          this.deleteOneResource(agentInfo,resource);
+	          this.$message({
+	            type: 'success',
+	            message: '删除成功!',
+	            duration:1000
+	          });
+	        }).catch(() => {
+	                  
+	        });
+	    },
+	  //   // 添加
+	  //   addInter(agentInfo){
+	  //   	this.addResources(agentInfo,this.addSources);
+			// this.dialogFormVisible = false
+	  //   }
+
+    }
 }
 </script>
 
@@ -87,29 +215,93 @@ export default {
 	background-color:white;
 	margin:10px 0;
 	.img-part{
-	    position: absolute;
-	    width: 150px;
-	    height: 150px;
+		height:100%;
+		.img-wrap{
+		    position: absolute;
+		    width: 150px;
+		    height: 150px;
+		}
+		.os-img{
+		    position: absolute;
+		    width: 80px;
+		    height: 80px;
+		    top: 50%;
+		    margin-top: -40px;
+		    left: 50%;
+		    margin-left: -40px;
+		}
+
 	}
-	.os-img{
-	    position: absolute;
-	    width: 80px;
-	    height: 80px;
-	    top: 50%;
-	    margin-top: -40px;
-	    left: 50%;
-	    margin-left: -40px;
-	}
+	
+	
 	.info-part{
-		height: 150px;
-		width:400px;
+		height:150px;
+		i{
+			font-size:16px;
+			cursor:pointer;
+		}
+		.info-shows{
+			height:50%;
+			line-height: 75px;
+			font-size:14px;
+			.name-style{
+				color:#00B4CF;
+				font-weight:bold;
+			}
+			.status-tab{
+				height: 50px;
+				padding:2px;
+			    color: #fff;
+
+			}
+			.idle-back-color{
+				background: #7FBC39;
+
+			}
+			.building-back-color{
+				background: #FF9A2A;
+
+			}
+			
+			
+
+		}
+		.info-operate{
+			height:50%;
+		    line-height: 75px;
+		    .plus-wrap{
+		    	height: 50px;
+		    	padding:5px;
+		    	background-color:#00B4Cf;
+		    	color:white;
+
+		    }
+			.resource-wrap{
+				height: 50px;
+				padding:5px;
+				background-color:#E1E4E6;
+				margin-left:10px;
+			}
+			.mgl-4{
+				margin-left:4px;
+			}
+			.deny-wrap{
+				height: 50px;
+				padding:5px 10px;
+				background-color:#00B4Cf;
+				color:#fff;
+
+			}
+
+		}
 
 	}
 
-	.info-shows{
-		background-color:blue;
 
-	}
+	
+
+
+	
 
 }
 

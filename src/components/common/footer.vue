@@ -19,7 +19,12 @@
 
 <style lang="less" scoped>
   footer {
+    height: 25px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
     background: #fff;
+    border-top: solid #ccc 1px;
     .com-infor-num {
       font-size: 12px;
       color: #444;

@@ -56,7 +56,7 @@
       }
     },
     created:function(){
-      this.orderPicStatus()
+      // this.orderPicStatus()
     }
   }
 </script>
@@ -67,7 +67,7 @@
   font-family: "Avenir", Helvetica,"Arial", "sans-serif";
   font-size: 14px;
   color: #666;
-  background: #ececec;
+  background: #F3F3F3;
 
 }
 .container{
