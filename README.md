@@ -10,7 +10,7 @@ there are some modules in my project you can uncompress them before you start to
 # install dependencies
 npm install
 
-# serve with hot reload at http://localhost:3001/agents
+# serve is running at http://localhost:3001/agents
 
 npm run dev
 
