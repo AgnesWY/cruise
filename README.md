@@ -12,7 +12,7 @@ npm install
 
 # serve is running at http://localhost:3001/agents
 
-npm run dev
+npm run start
 
 
 ``` 
@@ -24,7 +24,7 @@ Then you can access `http://localhost:3001/agents/` to see if the server is star
 npm install
 
 # serve with hot reload at localhost:9500
-npm run dev
+npm run start
 
 ``` 
 
