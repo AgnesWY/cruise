@@ -3,7 +3,7 @@
     <footer>
       <el-row>
         <p class="com-infor-num">
-       ©Copyright 2017 ThoughtWorks
+       ©Copyright 2019
       </p>
       </el-row>
       
